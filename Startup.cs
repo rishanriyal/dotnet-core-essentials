@@ -56,9 +56,19 @@ namespace middlewareStuff
 
             app.Map("/map", MapHandler);
 
+            app.MapWhen(context => context.Request.Query.ContainsKey("q"), HandleRequestWithQuery);
+
             app.Run(async context => await context.Response.WriteAsync("hello again \n"));
 
 
+        }
+
+        private void HandleRequestWithQuery(IApplicationBuilder obj)
+        {
+            obj.Use(async (context, next) =>
+            {
+                context.Response.WriteAsync("Helllo from query \n");
+            });
         }
 
         private void MapHandler(IApplicationBuilder app)
